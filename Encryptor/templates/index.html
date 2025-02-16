@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Encryptor</title>
+    <script>
+        async function encryptEmail() {
+            let email = document.getElementById("email").value;
+            let response = await fetch("/encrypt", {
+                method: "POST",
+                body: new URLSearchParams({ "email": email }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            });
+            let data = await response.json();
+            document.getElementById("encrypted").innerText = "Encrypted: " + data.encrypted_email;
+        }
+
+        async function decryptEmail() {
+            let encryptedEmail = document.getElementById("encrypted_email").value;
+            let response = await fetch("/decrypt", {
+                method: "POST",
+                body: new URLSearchParams({ "encrypted_email": encryptedEmail }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            });
+            let data = await response.json();
+            document.getElementById("decrypted").innerText = "Decrypted: " + data.decrypted_email;
+        }
+    </script>
+</head>
+<body>
+    <h2>Email Encryptor</h2>
+    
+    <h3>Encrypt Email</h3>
+    <input type="text" id="email" placeholder="Enter email">
+    <button onclick="encryptEmail()">Encrypt</button>
+    <p id="encrypted"></p>
+    
+    <h3>Decrypt Email</h3>
+    <input type="text" id="encrypted_email" placeholder="Enter encrypted email">
+    <button onclick="decryptEmail()">Decrypt</button>
+    <p id="decrypted"></p>
+</body>
+</html>
